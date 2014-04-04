@@ -6,7 +6,8 @@
 // 'test/spec/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
-var path = require('path');
+var path = require('path'),
+fs = require('fs')
 
 module.exports = function (grunt) {
 
@@ -15,6 +16,9 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
+
+  // Create a restart.txt file
+  fs.writeFileSync('.rebooted', 'rebooted');
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -31,6 +35,12 @@ module.exports = function (grunt) {
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
+        options: {
+          livereload: true
+        }
+      },
+      server: {
+        files:  [ '.rebooted' ],
         options: {
           livereload: true
         }
@@ -58,67 +68,30 @@ module.exports = function (grunt) {
       }
     },
 
-    // The actual grunt server settings
-    express: {
-      options: {
-        port: 9000,
-        hostname: '*'
-      },
-      livereload: {
+    nodemon: {
+      dev: {
+        script: 'server.js',
         options: {
-          server: path.resolve('./server/index'),
-          livereload: true,
-          serverreload: true,
-          bases: [path.resolve('./.tmp'), path.resolve(__dirname, '<%= yeoman.app %>')]
-        }
-      },
-      test: {
-        options: {
-          server: path.resolve('./server/index'),
-          bases: [path.resolve('./.tmp'), path.resolve(__dirname, 'test')]
-        }
-      },
-      dist: {
-        options: {
-          server: path.resolve('./server/index'),
-          bases: path.resolve(__dirname, '<%= yeoman.dist %>')
+          ignore: ['server/**/*.ejs'],
+          watch: ['server'],
+          env: {
+            PORT: '8000'
+          },
+          callback: function (nodemon) {
+            nodemon.on('log', function (event) {
+              console.log(event.colour);
+            });
+            // refreshes browser when server reboots
+            nodemon.on('restart', function () {
+              // Delay before server listens on port
+              setTimeout(function() {
+                fs.writeFileSync('.rebooted', 'rebooted');
+              }, 1000);
+            });
+          }
         }
       }
     },
-
-    // The actual grunt server settings
-    // connect: {
-    //   options: {
-    //     port: 9000,
-    //     // Change this to '0.0.0.0' to access the server from outside.
-    //     hostname: 'localhost',
-    //     livereload: 35729
-    //   },
-    //   livereload: {
-    //     options: {
-    //       open: true,
-    //       base: [
-    //         '.tmp',
-    //         '<%= yeoman.app %>'
-    //       ]
-    //     }
-    //   },
-    //   test: {
-    //     options: {
-    //       port: 9001,
-    //       base: [
-    //         '.tmp',
-    //         'test',
-    //         '<%= yeoman.app %>'
-    //       ]
-    //     }
-    //   },
-    //   dist: {
-    //     options: {
-    //       base: '<%= yeoman.dist %>'
-    //     }
-    //   }
-    // },
 
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
@@ -148,6 +121,12 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/*',
             '!<%= yeoman.dist %>/.git*'
           ]
+        }]
+      },
+      removeBower: {
+        files: [{
+          dot: true,
+          src: ['<%= yeoman.dist %>/bower_components']
         }]
       },
       server: '.tmp'
@@ -337,6 +316,12 @@ module.exports = function (grunt) {
       server: [
         'compass:server'
       ],
+      express: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
       test: [
         'compass'
       ],
@@ -384,17 +369,13 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('serve', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'express:dist:keepalive']);
-    }
 
     grunt.task.run([
       'clean:server',
       'bower-install',
       'concurrent:server',
       'autoprefixer',
-      'express:livereload',
-      'watch'
+      'concurrent:express'
     ]);
   });
 
@@ -407,7 +388,7 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'express:test',
+    'nodemon',
     'karma'
   ]);
 
@@ -425,7 +406,8 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'clean:removeBower'
   ]);
 
   grunt.registerTask('default', [

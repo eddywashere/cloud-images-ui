@@ -67,13 +67,14 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(__dirname + '/../../public'));
+  app.use(express.static(__dirname + '/../app'));
+  app.use('/styles', express.static(__dirname + '/../.tmp/styles'));
 });
 
 
-app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
+// app.get('/', function(req, res){
+//   res.render('index', { user: req.user, foo: 'fooooo' });
+// });
 
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
