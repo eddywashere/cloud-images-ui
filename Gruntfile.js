@@ -336,7 +336,7 @@ module.exports = function (grunt) {
     cdn: {
       options: {
         /** @required - root URL of your CDN (may contains sub-paths as shown below) */
-        cdn: 'http://72c404615ecd8789d3d8-2733c88b09e8375d36fd6ab958abcb9c.r84.cf2.rackcdn.com/dist/',
+        cdn: 'http://2af38e52cc241f806fef-6257090f8b77658659ee2c55c0d9059e.r10.cf1.rackcdn.com/0.6/', // TODO - make this a variable
         /** @optional  - if provided both absolute and relative paths will be converted */
         flatten: true,
         /** @optional  - if provided will be added to the default supporting types */
@@ -348,31 +348,35 @@ module.exports = function (grunt) {
       }
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= yeoman.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
+    // TODO - headers shouldn't override what pkgcloud does. create pr for merging upload.headers with default mime-type headers
+    cloudfiles: {
+      dist: {
+        user: process.env.RACKSPACE_USERNAME,
+        key: process.env.RACKSPACE_API_KEY,
+        region: 'DFW',
+        upload: [{
+          container: 'cloud-demo',
+          src: ['dist/**/*', '!dist/**/*.html'],
+          dest: '0.6/', // TODO - make this a variable
+          stripcomponents: 1
+        }]
+      },
+      html: {
+        user: process.env.RACKSPACE_USERNAME,
+        key: process.env.RACKSPACE_API_KEY,
+        region: 'DFW',
+        upload: [{
+          container: 'cloud-demo',
+          src: ['dist/**/*.html', '!dist/*.html'],
+          dest: '0.6/', // TODO - make this a variable
+          stripcomponents: 1,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'text/html'
+          }
+        }]
+      }
+    },
 
     // Test settings
     karma: {
@@ -428,7 +432,7 @@ module.exports = function (grunt) {
     ]);
 
     if (target === 'cdn') {
-      grunt.task.run(['cdn']);
+      grunt.task.run(['cloudfiles','cdn']);
     }
   });
 
