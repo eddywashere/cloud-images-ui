@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 var path = require('path'),
-fs = require('fs')
+fs = require('fs');
 
 module.exports = function (grunt) {
 
@@ -75,7 +75,8 @@ module.exports = function (grunt) {
           ignore: ['server/**/*.ejs'],
           watch: ['server'],
           env: {
-            PORT: '8000'
+            PORT: '8000',
+            DEBUG: 'app'
           },
           callback: function (nodemon) {
             nodemon.on('log', function (event) {
@@ -332,6 +333,21 @@ module.exports = function (grunt) {
       ]
     },
 
+    cdn: {
+      options: {
+        /** @required - root URL of your CDN (may contains sub-paths as shown below) */
+        cdn: 'http://72c404615ecd8789d3d8-2733c88b09e8375d36fd6ab958abcb9c.r84.cf2.rackcdn.com/dist/',
+        /** @optional  - if provided both absolute and relative paths will be converted */
+        flatten: true,
+        /** @optional  - if provided will be added to the default supporting types */
+        supportedTypes: { 'ejs': 'html' }
+      },
+      dist: {
+        /** @required  - string (or array of) including grunt glob variables */
+        src: ['<%= yeoman.dist %>/*.html']
+      }
+    },
+
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
@@ -388,27 +404,33 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'nodemon',
+    'concurrent:express',
     'karma'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'bower-install',
-    'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngmin',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'rev',
-    'usemin',
-    'htmlmin',
-    'clean:removeBower'
-  ]);
+  grunt.registerTask('build', function (target) {
+    grunt.task.run([
+      'clean:dist',
+      'bower-install',
+      'useminPrepare',
+      'concurrent:dist',
+      'autoprefixer',
+      'concat',
+      'ngmin',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'rev',
+      'usemin',
+      'htmlmin',
+      'clean:removeBower'
+    ]);
+
+    if (target === 'cdn') {
+      grunt.task.run(['cdn']);
+    }
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',

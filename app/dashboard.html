@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><%= title %></title>
+    <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -25,20 +25,8 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <h1>login</h1>
-    <form action="/login" method="post">
-      <div>
-      <label>Username:</label>
-      <input type="text" name="username"/><br/>
-      </div>
-      <div>
-      <label>Password:</label>
-      <input type="password" name="password"/>
-      </div>
-      <div>
-      <input type="submit" value="Submit"/>
-      </div>
-    </form>
+    <p>Username: <%= user.username %></p>
+    <p>Token: <%= user.token %></p>
     <div class="container" ng-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

@@ -2,12 +2,19 @@
   "name": "cloudimagesui",
   "version": "0.0.0",
   "dependencies": {
-    "express": "3.x.x",
+    "express": "~4.0.0",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4",
     "connect-flash": "0.1.x",
     "ejs": ">= 0.0.0",
     "ejs-locals": ">= 0.0.0",
     "passport": ">= 0.0.0",
-    "passport-keystone": ">= 0.0.0"
+    "passport-keystone": ">= 0.0.0",
+    "express-session": "*",
+    "cors": "~2.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -39,7 +46,8 @@
     "grunt-karma": "~0.8.2",
     "karma": "~0.12.1",
     "karma-ng-html2js-preprocessor": "~0.1.0",
-    "grunt-nodemon": "~0.2.1"
+    "grunt-nodemon": "~0.2.1",
+    "grunt-cdn": "~0.5.2"
   },
   "engines": {
     "node": ">=0.10.0"
