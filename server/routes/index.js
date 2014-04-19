@@ -4,7 +4,7 @@ var passport = require('passport');
 var Authentication = require('../authentication');
 
 router.get('/dashboard', Authentication.ensureAuthenticated, function(req, res){
-  res.render('dashboard', { user: req.user });
+  res.render('dashboard', { user: req.user, title: 'Dashboard' });
 });
 
 // router.get('/login', function(req, res){

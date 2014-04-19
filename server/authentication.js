@@ -1,5 +1,23 @@
 var passport = require('passport');
 var KeystoneStrategy = require('passport-keystone').Strategy;
+var _ = require('lodash');
+
+
+var mapCatalog = function (serviceCatalog){
+  var services = _.each(serviceCatalog, function(service) {
+
+    var endpoints = {};
+    if (service.endpoints.length > 1) {
+      _.each(service.endpoints, function(endpoint){
+        endpoints[endpoint.region] = endpoint;
+      });
+    } else {
+      endpoints['default'] = service.endpoints[0]
+    }
+    service.endpoints = endpoints;
+  });
+  return services;
+};
 
 module.exports = {
 
@@ -18,11 +36,13 @@ module.exports = {
     function(req, identity, done) {
       if (!req.user) {
         var user = {};
-
         user.id    = identity.token.tenant.id +'-'+ identity.user.name;
         user.username  = identity.user.name;
         user.tenant  = identity.token.tenant.id;
         user.token = identity.token.id;
+        // map region endpoints array to object
+        // ps - pkcloud already maps serviceCatalog to array in identity.serviceCatalog.services
+        user.serviceCatalog = mapCatalog(identity.serviceCatalog.services);
         req.session.cookie.expires = Date.parse(identity.token.expires) - Date.now();
         return done(null, user);
       } else {
