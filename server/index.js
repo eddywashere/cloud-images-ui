@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(session({
   secret: 'chachachangeme!!!',
   store: new MongoStore({
-    url: process.env.MONGODB|| 'mongodb://localhost:27017/cloud-images-ui',
+    url: process.env.MONGODB || process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost:27017/cloud-images-ui',
     auto_reconnect: true
   })
 }));

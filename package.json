@@ -52,7 +52,8 @@
     "karma-ng-html2js-preprocessor": "~0.1.0",
     "grunt-nodemon": "~0.2.1",
     "grunt-cdn": "~0.5.2",
-    "grunt-cloudfiles": "~0.2.1"
+    "grunt-cloudfiles": "~0.2.1",
+    "grunt-git-deploy": "~0.1.1"
   },
   "engines": {
     "node": ">=0.10.0"

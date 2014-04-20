@@ -315,6 +315,11 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      deploy: {
+        expand: true,
+        dest: '.tmp/deploy',
+        src: ['package.json', 'app/**/*', 'dist/**/*', 'server/**/*', 'server.js']
       }
     },
 
@@ -384,6 +389,17 @@ module.exports = function (grunt) {
       }
     },
 
+    git_deploy: {
+      heroku: {
+        options: {
+          url: 'git@heroku.com:cloud-images-ui.git',
+          branch: 'master',
+          message: 'Grunt Deployment'
+        },
+        src: '.tmp/deploy'
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -446,5 +462,11 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('deploy:heroku', [
+    'clean:server',
+    'copy:deploy',
+    'git_deploy:heroku'
   ]);
 };
