@@ -467,6 +467,7 @@ module.exports = function (grunt) {
   grunt.registerTask('deploy:heroku', [
     'clean:server',
     'copy:deploy',
-    'git_deploy:heroku'
+    'git_deploy:heroku',
+    'clean:dist'
   ]);
 };
