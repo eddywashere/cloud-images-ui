@@ -54,7 +54,14 @@
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
     </script>
-
+    <% if (user) { %>
+      <script>
+        var user = {
+          username: <%- JSON.stringify(user.username) %>,
+          serviceCatalog: <%- JSON.stringify(user.serviceCatalog) %>
+        };
+      </script>
+    <% } %>
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
