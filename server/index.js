@@ -103,7 +103,7 @@ app.all('/proxy*', function (req, res) {
 
   req.url = req.url.split('/proxy/')[1]; // remove /proxy/
   service = req.url.split('/')[0]; // grabs 'serviceName,[region]'
-  req.url = req.url.split('/')[1]; // transform req.url
+  req.url = req.url.split(service)[1]; // transform req.url
 
   var serviceInfo = parseService(service);
   if (!req.user.serviceCatalog[serviceInfo.name]){
