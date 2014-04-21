@@ -1,4 +1,6 @@
-# Cloud Images UI
+# Cloud Images UI (WIP)
+
+Based on rack-hack-stack(a self contained hack stack): passport-keystone, praxy(node-http-proxy), express 4, angular-generator
 
 ## Getting started
 
@@ -7,7 +9,12 @@
 - Requires mongodb - make sure `mongod` is running locally
 - Run development server with `grunt serve`
 
-Production?
+## Production?
 
 - `grunt build` or `grunt build:cdn`
+-  set env variable for mongodb
 - Run the production server with `node server.js`
+
+## TODO
+
+- add serviceCatolog proxy to a middleware module
