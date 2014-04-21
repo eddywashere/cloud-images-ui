@@ -22,5 +22,12 @@
     <li><a ng-href="/proxy/cloudServersOpenStack,IAD/images">Images [IAD]</a></li>
     <li><a ng-href="/proxy/cloudServersOpenStack,LON/images">Images [LON]</a></li>
   </ul>
-  <p>Etc...</p>
+  <h4>Servers</h4>
+  <p ng-show="servers.length > 0">
+    <ul>
+      <li ng-repeat="server in servers">
+        <a href="/proxy/cloudServersOpenStack,ORD/servers/{{server.id}}" title="{{server.status}}">{{server.name}}</a> - {{server.accessIPv4}}
+      </li>
+    </ul>
+  </p>
 </div>

@@ -6,8 +6,7 @@
 // 'test/spec/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
-var path = require('path'),
-fs = require('fs');
+var fs = require('fs');
 
 module.exports = function (grunt) {
 
@@ -388,7 +387,7 @@ module.exports = function (grunt) {
       }
     },
 
-    git_deploy: {
+    'git_deploy': {
       heroku: {
         options: {
           url: 'git@heroku.com:cloud-images-ui.git',
@@ -409,7 +408,7 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('serve', function (target) {
+  grunt.registerTask('serve', function () {
 
     grunt.task.run([
       'clean:server',
