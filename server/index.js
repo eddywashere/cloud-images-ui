@@ -110,10 +110,7 @@ app.all('/proxy*', function (req, res) {
     console.log('endpoint not found')
     return res.json(404, {error: 'Endpoint Not Found'})
   }
-  if (!req.user.serviceCatalog[serviceInfo.name].endpoints[serviceInfo.region]){
-    console.log('region not found')
-    return res.json(404, {error: 'Region Not Found'})
-  }
+
   if (serviceInfo.region){
     endpoint = req.user.serviceCatalog[serviceInfo.name].endpoints[serviceInfo.region].publicURL
   } else {
@@ -121,7 +118,7 @@ app.all('/proxy*', function (req, res) {
   }
   endpointInfo = Url.parse(endpoint);
   target = endpoint.split(endpointInfo.path)[0];
-  req.url = endpointInfo.pathname + '/' + req.url;
+  req.url = endpointInfo.pathname + req.url;
 
   // replace headers
   req.headers = {};
