@@ -24,9 +24,11 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: {
-      // configurable paths
       app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      cdnContainer: 'cloud-demo',
+      cdnUrl: 'https://b5d45c6f37adce61f143-6257090f8b77658659ee2c55c0d9059e.ssl.cf1.rackcdn.com',
+      dist: 'dist',
+      pkg: grunt.file.readJSON('package.json')
     },
 
     // Watches files for changes and runs tasks based on the changed files
@@ -345,7 +347,7 @@ module.exports = function (grunt) {
     cdn: {
       options: {
         /** @required - root URL of your CDN (may contains sub-paths as shown below) */
-        cdn: 'https://b5d45c6f37adce61f143-6257090f8b77658659ee2c55c0d9059e.ssl.cf1.rackcdn.com/0.8/', // TODO - make this a variable
+        cdn: '<%= yeoman.cdnUrl %>/<%= yeoman.pkg.version %>/',
         /** @optional  - if provided both absolute and relative paths will be converted */
         flatten: true,
         /** @optional  - if provided will be added to the default supporting types */
@@ -364,9 +366,9 @@ module.exports = function (grunt) {
         key: process.env.RACKSPACE_API_KEY,
         region: 'DFW',
         upload: [{
-          container: 'cloud-demo',
+          container: '<%= yeoman.cdnContainer %>',
           src: ['dist/**/*', '!dist/**/*.html'],
-          dest: '0.8/', // TODO - make this a variable
+          dest: '<%= yeoman.pkg.version %>/',
           stripcomponents: 1
         }]
       },
@@ -375,9 +377,9 @@ module.exports = function (grunt) {
         key: process.env.RACKSPACE_API_KEY,
         region: 'DFW',
         upload: [{
-          container: 'cloud-demo',
+          container: '<%= yeoman.cdnContainer %>',
           src: ['dist/**/*.html', '!dist/*.html'],
-          dest: '0.8/', // TODO - make this a variable
+          dest: '<%= yeoman.pkg.version %>/', // TODO - make this a variable
           stripcomponents: 1,
           headers: {
             'Access-Control-Allow-Origin': '*',
