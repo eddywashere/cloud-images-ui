@@ -345,7 +345,7 @@ module.exports = function (grunt) {
     cdn: {
       options: {
         /** @required - root URL of your CDN (may contains sub-paths as shown below) */
-        cdn: 'http://2af38e52cc241f806fef-6257090f8b77658659ee2c55c0d9059e.r10.cf1.rackcdn.com/0.6/', // TODO - make this a variable
+        cdn: 'https://b5d45c6f37adce61f143-6257090f8b77658659ee2c55c0d9059e.ssl.cf1.rackcdn.com/0.8/', // TODO - make this a variable
         /** @optional  - if provided both absolute and relative paths will be converted */
         flatten: true,
         /** @optional  - if provided will be added to the default supporting types */
@@ -366,7 +366,7 @@ module.exports = function (grunt) {
         upload: [{
           container: 'cloud-demo',
           src: ['dist/**/*', '!dist/**/*.html'],
-          dest: '0.6/', // TODO - make this a variable
+          dest: '0.8/', // TODO - make this a variable
           stripcomponents: 1
         }]
       },
@@ -377,7 +377,7 @@ module.exports = function (grunt) {
         upload: [{
           container: 'cloud-demo',
           src: ['dist/**/*.html', '!dist/*.html'],
-          dest: '0.6/', // TODO - make this a variable
+          dest: '0.8/', // TODO - make this a variable
           stripcomponents: 1,
           headers: {
             'Access-Control-Allow-Origin': '*',

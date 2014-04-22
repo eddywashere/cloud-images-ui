@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')({ session: session });
 var bodyParser = require('body-parser');
+var compress = require('compression')();
 var Authentication = require('./authentication');
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -20,12 +21,16 @@ var Url = require('url');
 var _ = require('lodash');
 // routes
 var routes = require('./routes/index');
+var corsOptions = {
+  origin: 'https://b5d45c6f37adce61f143-6257090f8b77658659ee2c55c0d9059e.ssl.cf1.rackcdn.com'
+};
 
 // express setup
 var app = express();
 
 app.use(favicon());
 app.use(logger('dev'));
+app.use(compress);
 app.use(bodyParser());
 app.use(cookieParser());
 app.use(session({
@@ -40,7 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 // other
 app.use(flash());
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get('/', function(req, res){
   res.render('index', { user: req.user, title: 'Dashboard' });
