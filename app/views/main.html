@@ -9,18 +9,14 @@
 
 <div class="row marketing">
   <h4>API Endpoints</h4>
-  <p>Servers</p>
   <ul>
-    <li><a ng-href="/proxy/cloudServersOpenStack,ORD/servers">Servers [ORD]</a></li>
-    <li><a ng-href="/proxy/cloudServersOpenStack,DFW/servers">Servers [DFW]</a></li>
-    <li><a ng-href="/proxy/cloudServersOpenStack,IAD/servers">Servers [IAD]</a></li>
-  </ul>
-  <p>Images</p>
-  <ul>
-    <li><a ng-href="/proxy/cloudServersOpenStack,ORD/images">Images [ORD]</a></li>
-    <li><a ng-href="/proxy/cloudServersOpenStack,DFW/images">Images [DFW]</a></li>
-    <li><a ng-href="/proxy/cloudServersOpenStack,IAD/images">Images [IAD]</a></li>
-    <li><a ng-href="/proxy/cloudServersOpenStack,LON/images">Images [LON]</a></li>
+    <li ng-repeat="(service, catalog) in user.serviceCatalog">
+      {{service}} -
+      <span ng-repeat="(region, enpoint) in catalog.endpoints">
+        <a ng-if="region == 'default'" href="/proxy/{{service}}/{{getListCall(service)}}">default</a>
+        <a ng-if="region != 'default'" href="/proxy/{{service}},{{region}}/{{getListCall(service)}}">{{region | uppercase}}</a>{{{true: '', false: ', '}[$last]}}
+      </span>
+    </li>
   </ul>
   <h4>Servers</h4>
   <p ng-show="servers.length > 0">

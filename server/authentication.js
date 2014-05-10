@@ -36,7 +36,7 @@ module.exports = {
     function(req, identity, done) {
       if (!req.user) {
         var user = {};
-        user.id    = identity.token.tenant.id +'-'+ identity.user.name;
+        user.id    = identity.user.id;
         user.username  = identity.user.name;
         user.tenant  = identity.token.tenant.id;
         user.token = identity.token.id;
@@ -47,7 +47,7 @@ module.exports = {
         return done(null, user);
       } else {
         // user already exists and is logged in, we have to link accounts
-        var user            = req.user; // pull the user out of the session
+        var user = req.user; // pull the user out of the session
         user.token = identity.token.id;
         req.session.cookie.expires = Date.parse(identity.token.expires) - Date.now();
         return done(null, user);

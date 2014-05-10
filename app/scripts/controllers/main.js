@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cloudImagesUiApp')
-  .controller('MainCtrl', function ($scope, $http, Servers) {
+  .controller('MainCtrl', function ($scope, $http, Servers, $window) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -9,6 +9,28 @@ angular.module('cloudImagesUiApp')
     ];
 
     $scope.servers = [];
+    var serviceDefaults = {
+      autoscale: 'groups',
+      cloudBackup: 'backup-configuration',
+      cloudBigData: 'clusters',
+      cloudBlockStorage: 'volumes',
+      cloudDNS: 'domains',
+      cloudDatabases: 'instances',
+      cloudFiles: '',
+      cloudFilesCDN: '',
+      cloudImages: 'images',
+      cloudLoadBalancers: 'loadbalancers',
+      cloudMonitoring: 'entities',
+      cloudOrchestration: 'stacks',
+      cloudQueues: 'queues',
+      cloudServersOpenStack: 'servers'
+    };
+
+    $scope.user = $window.user;
+
+    $scope.getListCall = function(name){
+      return serviceDefaults[name] || '';
+    };
 
     Servers.get({region: 'ORD'}, function(data){
       $scope.servers = $scope.servers.concat(data.servers);
