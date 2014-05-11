@@ -10,11 +10,11 @@
 <div class="row marketing">
   <h4>API Endpoints</h4>
   <ul>
-    <li ng-repeat="(service, catalog) in user.serviceCatalog">
-      {{service}} -
-      <span ng-repeat="(region, enpoint) in catalog.endpoints">
-        <a ng-if="region == 'default'" href="/proxy/{{service}}/{{getListCall(service)}}">default</a>
-        <a ng-if="region != 'default'" href="/proxy/{{service}},{{region}}/{{getListCall(service)}}">{{region | uppercase}}</a>{{{true: '', false: ', '}[$last]}}
+    <li ng-repeat="(i, service) in user.serviceCatalog">
+      {{service.name}} -
+      <span ng-repeat="(i, endpoint) in service.endpoints">
+        <a ng-if="!endpoint.region" href="/proxy/{{service.name}}/{{getListCall(service.name)}}">Default</a>
+        <a ng-if="endpoint.region" href="/proxy/{{service.name}},{{endpoint.region}}/{{getListCall(service.name)}}">{{endpoint.region | uppercase}}</a>{{{true: '', false: ', '}[$last]}}
       </span>
     </li>
   </ul>
