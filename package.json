@@ -1,6 +1,6 @@
 {
   "name": "cloudimagesui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "server.js",
   "dependencies": {
     "body-parser": "~1.0.0",
