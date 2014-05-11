@@ -10,6 +10,7 @@ var MongoStore = require('connect-mongo')({ session: session });
 var bodyParser = require('body-parser');
 var compress = require('compression')();
 var Authentication = require('./authentication');
+var ErrorHandler = require('./error');
 var passport = require('passport');
 var flash = require('connect-flash');
 var cors = require('cors');
@@ -84,27 +85,10 @@ app.use(function(req, res, next) {
 });
 
 /// error handlers
-
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
+  app.use(ErrorHandler.development);
+} else {
+  app.use(ErrorHandler.production);
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
 
 module.exports = app;
